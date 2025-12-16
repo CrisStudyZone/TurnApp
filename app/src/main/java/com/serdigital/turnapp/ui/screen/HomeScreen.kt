@@ -41,7 +41,9 @@ fun HomeScreen(navController: NavHostController) {
                 onTodayAppointmentsClick = { navController.navigate(Routes.CalendarScreen.route) },
             )
             ServicesPreview()
-            QuickStats()
+            QuickStats(
+
+            )
         }
         BottomNavigationBar(
             modifier = Modifier.align(Alignment.BottomCenter)

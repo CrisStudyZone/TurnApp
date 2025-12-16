@@ -1,10 +1,12 @@
 package com.serdigital.turnapp.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +30,28 @@ fun RegisterScreen(
 
 
     val state by registerViewModel.registerState.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(state){
+        when(state){
+            is RegisterViewModel.RegisterState.Success -> {
+                Toast.makeText(
+                    context,
+                    (state as RegisterViewModel.RegisterState.Success).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+                navController.popBackStack()
+            }
+            is RegisterViewModel.RegisterState.Error -> {
+                Toast.makeText(
+                    context,
+                    (state as RegisterViewModel.RegisterState.Error).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> Unit
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -75,24 +99,33 @@ fun RegisterScreen(
 
                     // Botón Registrar
                     PrimaryButton(
-                        text = "Iniciar sesión",
+                        text = stringResource(id = R.string.register_button),
                         onClick = { registerViewModel.registerWithEmail(email, password) }
                     )
 
                     // Volver al login
-                    TextButton(onClick = { navController.popBackStack() }) {
-                        Text(stringResource(id = R.string.back_to_login), color = primaryDark)
+                    TextButton(
+                        onClick = { navController.popBackStack() }
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.back_to_login),
+                            color = primaryDark
+                        )
                     }
 
                     // Estado (mostrar mensajes)
                     when (state) {
                         is RegisterViewModel.RegisterState.Success -> {
-                            Text((state as RegisterViewModel.RegisterState.Success).message,
-                                color = secondaryContainerDark)
+                            Text(
+                                text = (state as RegisterViewModel.RegisterState.Success).message,
+                                color = secondaryContainerDark
+                            )
                         }
                         is RegisterViewModel.RegisterState.Error -> {
-                            Text((state as RegisterViewModel.RegisterState.Error).message,
-                                color = MaterialTheme.colorScheme.error)
+                            Text(
+                                text = (state as RegisterViewModel.RegisterState.Error).message,
+                                color = MaterialTheme.colorScheme.error
+                            )
                         }
                         else -> {}
                     }

@@ -13,5 +13,6 @@
     <string name="password">Password\n</string>
     <string name="register">Registrar</string>
     <string name="back_to_login">LogIn</string>
+    <string name="register_button">Registrarse</string>
 
 </resources>
